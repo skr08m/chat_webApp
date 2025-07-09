@@ -1,8 +1,12 @@
-package com.example.chat_webapp.model;
+package com.example.chat_webapp.entitiy;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "chat_room_members")
 public class ChatRoomMembersModel {
 

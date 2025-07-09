@@ -1,12 +1,13 @@
-package com.example.chat_webapp.model;
+package com.example.chat_webapp.entitiy;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
 
 @Entity
-@getter
+@Getter
 @Setter
 @Table(name = "chat_messages")
 public class ChatMessagesModel {

@@ -3,7 +3,8 @@ package com.example.chat_webapp.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.chat_webapp.model.ChatRoomMembersModel;
+
+import com.example.chat_webapp.entitiy.ChatRoomMembersModel;
 
 public interface ChatRoomMemberRepository extends JpaRepository<ChatRoomMembersModel, Long> {
 
@@ -11,8 +12,8 @@ public interface ChatRoomMemberRepository extends JpaRepository<ChatRoomMembersM
     List<ChatRoomMembersModel> findByUserId(Long userId);
 
     // あるチャットルームのメンバー一覧取得
-    List<ChatRoomMembersModel> findByChatRoomId(Long chatRoomId);
+    List<ChatRoomMembersModel> findByRoomId(Long roomId);
 
     // 特定ユーザーとルームのメンバー情報取得
-    ChatRoomMembersModel findByUserIdAndChatRoomId(Long userId, Long chatRoomId);
+    ChatRoomMembersModel findByUserIdAndRoomId(Long userId, Long roomId);
 }

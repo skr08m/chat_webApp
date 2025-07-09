@@ -1,4 +1,4 @@
-package com.example.chat_webapp.model;
+package com.example.chat_webapp.entitiy;
 
 import jakarta.persistence.*;
 import lombok.Getter;
