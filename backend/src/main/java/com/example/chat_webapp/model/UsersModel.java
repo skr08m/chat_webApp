@@ -1,6 +1,8 @@
 package com.example.chat_webapp.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -11,6 +13,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class UsersModel {
 
