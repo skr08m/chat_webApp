@@ -1,6 +1,6 @@
 package com.example.chat_webapp.security;
 
-import com.example.chat_webapp.model.UsersModel;
+import com.example.chat_webapp.entitiy.UsersModel;
 import com.example.chat_webapp.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,7 +1,8 @@
 package com.example.chat_webapp.config;
 
+import com.example.chat_webapp.security.CustomUserDetailsService;
 import com.example.chat_webapp.security.JwtAuthenticationFilter;
-import com.example.chat_webapp.service.CustomUserDetailsService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
