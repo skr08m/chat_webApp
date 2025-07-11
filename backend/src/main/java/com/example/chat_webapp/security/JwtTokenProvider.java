@@ -22,12 +22,12 @@ public class JwtTokenProvider {
     }
 
     // JWTトークン生成
-    public String generateToken(String username) {
+    public String generateToken(String userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(userId)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)

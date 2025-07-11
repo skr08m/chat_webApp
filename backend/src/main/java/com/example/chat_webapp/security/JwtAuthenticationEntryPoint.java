@@ -13,6 +13,7 @@ import java.io.IOException;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
+    //ログインしていない状態で、認証が必要なAPIにアクセスがあった場合に呼び出される
     public void commence(HttpServletRequest request,
             HttpServletResponse response,
             AuthenticationException authException)

@@ -29,47 +29,12 @@ public class UsersModel {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(name = "password_hash", nullable = false, length = 255)
-    private String passwordHash;
-
-    @Column(length = 255)
-    private String salt;
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
 
     @Column(name = "authenticated", nullable = false)
     private boolean isAuthenticated = false;
 
-    private static final int ITERATIONS = 10000;
-    private static final int KEY_LENGTH = 256;
-
-    public UsersModel(String email, String password) {
-        this.email = email;
-        generateSalt();
-        this.passwordHash = hashPassword(password, salt);
+    public UsersModel() {
     }
-
-    // --- ソルト自動生成メソッド ---
-    public void generateSalt() {
-        this.salt = UUID.randomUUID().toString();
-    }
-
-    // ハッシュ化関数
-    private String hashPassword(String password, String saltBase64) {
-        try {
-            byte[] saltBytes = Base64.getDecoder().decode(saltBase64);
-            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, ITERATIONS, KEY_LENGTH);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            byte[] hash = skf.generateSecret(spec).getEncoded();
-            return Base64.getEncoder().encodeToString(hash);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException("Error while hashing password", e);
-        }
-    }
-
-    // パスワード検証用メソッド
-    public boolean verifyPassword(String rawPassword) {
-        String hashedInput = hashPassword(rawPassword, this.salt);
-        return hashedInput.equals(this.passwordHash);
-    }
-
-    // --- getter/setter省略可（Lombok可） ---
 }
