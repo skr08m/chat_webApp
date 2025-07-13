@@ -3,7 +3,9 @@ package com.example.chat_webapp.service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.example.chat_webapp.entitiy.UsersModel;
@@ -17,7 +19,8 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
-    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
+    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider,
+            UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
@@ -32,7 +35,26 @@ public class AuthService {
         UsersModel user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         // 認証成功ならJWTを生成して返す
-        String id = String.valueOf(user.getUserId());
+        String id = user.getUserId().toString();
         return jwtTokenProvider.generateToken(id);
+    }
+
+    // 【2】現在ログイン中のユーザー情報取得
+    public UsersModel getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("ユーザーが認証されていません");
+        }
+        Object principal = authentication.getPrincipal();
+        String email;
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails) principal).getUsername();
+        } else if (principal instanceof String) {
+            email = (String) principal;
+        } else {
+            throw new RuntimeException("ユーザー情報の取得に失敗しました");
+        }
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

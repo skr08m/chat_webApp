@@ -68,7 +68,7 @@
         <dia:point val="9.8,5.05"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.8,5.05;21.495,10.95"/>
+        <dia:rectangle val="9.8,5.05;21.495,10.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -80,7 +80,7 @@
         <dia:real val="11.695"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="5.9000000000000004"/>
+        <dia:real val="5.0999999999999996"/>
       </dia:attribute>
       <dia:attribute name="text_colour">
         <dia:color val="#000000"/>
@@ -193,27 +193,7 @@
         </dia:composite>
         <dia:composite type="table_attribute">
           <dia:attribute name="name">
-            <dia:string>#password_hash#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#VARCHAR(255)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="primary_key">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="nullable">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="unique">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="table_attribute">
-          <dia:attribute name="name">
-            <dia:string>#salt#</dia:string>
+            <dia:string>#password#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#VARCHAR(255)#</dia:string>
@@ -897,7 +877,7 @@
     </dia:object>
     <dia:object type="Database - Reference" version="0" id="O6">
       <dia:attribute name="obj_pos">
-        <dia:point val="39.79,18.95"/>
+        <dia:point val="49.28,9.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
         <dia:rectangle val="39.79,9.4;49.7675,18.95"/>
@@ -906,13 +886,13 @@
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="39.79,18.95"/>
-        <dia:point val="49.28,18.95"/>
         <dia:point val="49.28,9.4"/>
+        <dia:point val="49.28,18.95"/>
+        <dia:point val="39.79,18.95"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
-        <dia:enum val="0"/>
         <dia:enum val="1"/>
+        <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="orth_autoroute">
         <dia:boolean val="true"/>
@@ -955,28 +935,28 @@
         <dia:real val="0.59999999999999998"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O5" connection="17"/>
-        <dia:connection handle="1" to="O1" connection="9"/>
+        <dia:connection handle="0" to="O1" connection="9"/>
+        <dia:connection handle="1" to="O5" connection="17"/>
       </dia:connections>
     </dia:object>
     <dia:object type="Database - Reference" version="0" id="O7">
       <dia:attribute name="obj_pos">
-        <dia:point val="25.4,18.95"/>
+        <dia:point val="15.6475,10.15"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.6475,10.95;25.4,18.95"/>
+        <dia:rectangle val="15.6475,10.15;25.4,18.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="25.4,18.95"/>
+        <dia:point val="15.6475,10.15"/>
         <dia:point val="15.6475,18.95"/>
-        <dia:point val="15.6475,10.95"/>
+        <dia:point val="25.4,18.95"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
-        <dia:enum val="0"/>
         <dia:enum val="1"/>
+        <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="orth_autoroute">
         <dia:boolean val="true"/>
@@ -1019,8 +999,8 @@
         <dia:real val="0.59999999999999998"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O5" connection="16"/>
-        <dia:connection handle="1" to="O0" connection="9"/>
+        <dia:connection handle="0" to="O0" connection="9"/>
+        <dia:connection handle="1" to="O5" connection="16"/>
       </dia:connections>
     </dia:object>
   </dia:layer>

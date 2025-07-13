@@ -27,6 +27,4 @@ public class ChatRoomsModel {
 
     @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt = ZonedDateTime.now();
-
-    // getter/setter省略
 }
