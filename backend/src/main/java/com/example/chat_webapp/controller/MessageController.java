@@ -1,6 +1,9 @@
 package com.example.chat_webapp.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.chat_webapp.dto.MessageRequest;
 
 @RestController
 @RequestMapping("/api/messages")

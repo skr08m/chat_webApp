@@ -19,6 +19,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        //TODO未実装
         return ResponseEntity.ok().build();
     }
 
@@ -30,6 +31,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
+        //TODO未実装
         return ResponseEntity.ok().build();
     }
 
@@ -41,6 +43,7 @@ public class AuthController {
      */
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
+        //TODO未実装
         return ResponseEntity.ok().build();
     }
 }

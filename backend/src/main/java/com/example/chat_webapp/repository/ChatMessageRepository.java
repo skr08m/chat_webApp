@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessagesModel, Long> {
 
-    List<ChatMessagesModel> findByRoomIdOrderByCreatedAtAsc(Long roomId);
+    List<ChatMessagesModel> findByRoomIdAndDeletedFalseOrderByCreatedAtAsc(Long roomId);
 
     // 必要に応じてページング・期間絞込みなどを追加可能
 }

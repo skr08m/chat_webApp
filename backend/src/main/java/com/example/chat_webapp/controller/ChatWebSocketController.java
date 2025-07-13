@@ -3,6 +3,8 @@ package com.example.chat_webapp.controller;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.stereotype.Controller;
 
+import com.example.chat_webapp.dto.ChatMessage;
+
 @Controller
 public class ChatWebSocketController {
 

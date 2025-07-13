@@ -3,6 +3,8 @@ package com.example.chat_webapp.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.chat_webapp.dto.RoomCreateRequest;
+
 @RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
@@ -15,6 +17,7 @@ public class RoomController {
      */
     @GetMapping
     public ResponseEntity<?> getUserRooms() {
+        //TODO未実装
         return ResponseEntity.ok().build();
     }
 
@@ -26,6 +29,7 @@ public class RoomController {
      */
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestBody RoomCreateRequest request) {
+        //TODO未実装、個人はトークン情報から特定
         return ResponseEntity.ok().build();
     }
 
@@ -37,6 +41,7 @@ public class RoomController {
      */
     @DeleteMapping("/{roomId}")
     public ResponseEntity<?> deleteRoom(@PathVariable Long roomId) {
+        //TODO未実装
         return ResponseEntity.ok().build();
     }
 
@@ -48,7 +53,7 @@ public class RoomController {
      */
     @GetMapping("/search")
     public ResponseEntity<?> searchRooms(@RequestParam String keyword) {
+        //TODO未実装
         return ResponseEntity.ok().build();
     }
 }
-

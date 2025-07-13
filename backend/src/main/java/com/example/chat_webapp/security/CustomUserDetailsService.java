@@ -28,5 +28,5 @@ public class CustomUserDetailsService implements UserDetailsService {
             .password(user.getPassword())
             .authorities("ROLE_USER")  // 必要に応じて権限を設定
             .build();
-    }
+    }//AuthServiceで使用している
 }
