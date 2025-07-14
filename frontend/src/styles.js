@@ -1,0 +1,88 @@
+// src/styles.js
+export const styles = {
+    container: {
+        display: "flex",
+        height: "100vh",
+        width: "100%",
+        backgroundColor: "#e0f7fa",
+    },
+    sidebar: {
+        width: "220px",
+        backgroundColor: "#ffe0b2",
+        padding: "20px",
+        boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
+    },
+    sidebarTitle: {
+        marginBottom: "10px",
+        color: "#5d4037",
+    },
+    roomList: {
+        listStyle: "none",
+        padding: 0,
+    },
+    roomItem: {
+        padding: "8px 12px",
+        marginBottom: "8px",
+        backgroundColor: "#fff3e0",
+        borderRadius: "6px",
+        cursor: "pointer",
+    },
+    chatSection: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        padding: "20px",
+        position: "relative",
+    },
+    chatHeader: {
+        display: "flex",
+        justifyContent: "flex-end",
+        gap: "10px",
+        marginBottom: "15px",
+    },
+    actionButton: {
+        backgroundColor: "#ef5350",
+        color: "white",
+        border: "none",
+        padding: "8px 12px",
+        borderRadius: "6px",
+        cursor: "pointer",
+        fontWeight: "bold",
+    },
+    messageArea: {
+        flex: 1,
+        overflowY: "auto",
+        backgroundColor: "#ffffff",
+        padding: "15px",
+        borderRadius: "10px",
+        boxShadow: "inset 0 1px 4px rgba(0,0,0,0.1)",
+        marginBottom: "20px",
+    },
+    messageBubble: {
+        padding: "10px",
+        marginBottom: "10px",
+        backgroundColor: "#c8e6c9",
+        borderRadius: "10px",
+        maxWidth: "70%",
+    },
+    inputArea: {
+        display: "flex",
+        gap: "10px",
+    },
+    input: {
+        flex: 1,
+        padding: "12px",
+        borderRadius: "6px",
+        border: "1px solid #ccc",
+        fontSize: "16px",
+    },
+    sendButton: {
+        backgroundColor: "#0077c2",
+        color: "white",
+        padding: "12px 18px",
+        border: "none",
+        borderRadius: "6px",
+        fontWeight: "bold",
+        cursor: "pointer",
+    },
+};
