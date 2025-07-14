@@ -32,6 +32,8 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
         // 認証実行
         Authentication authentication = authenticationManager.authenticate(authToken);
+        // 認証が成功したら、SecurityContextHolderにAuthenticationを設定(後々の認証用に発行済みトークンとして保持しておく)
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         UsersModel user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         // 認証成功ならJWTを生成して返す

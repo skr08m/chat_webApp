@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class RoomCreateRequest {
     private String name;
+    private String descliption;
 }

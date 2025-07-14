@@ -1,13 +1,23 @@
 package com.example.chat_webapp.controller;
 
+import com.example.chat_webapp.service.ChatService;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.chat_webapp.dto.MessageRequest;
+import com.example.chat_webapp.entitiy.ChatMessagesModel;
 
 @RestController
 @RequestMapping("/api/messages")
 public class MessageController {
+
+    private final ChatService chatService;
+
+    MessageController(ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     /**
      * GET /api/messages/{roomId}
@@ -17,18 +27,7 @@ public class MessageController {
      */
     @GetMapping("/{roomId}")
     public ResponseEntity<?> getMessages(@PathVariable Long roomId) {
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * POST /api/messages/{roomId}
-     * リクエストボディ：{ message }
-     * 認証必要
-     * 指定ルームにメッセージを送信（WebSocketとは別で履歴保存用）
-     */
-    @PostMapping("/{roomId}")
-    public ResponseEntity<?> postMessage(@PathVariable Long roomId, @RequestBody MessageRequest request) {
-        return ResponseEntity.ok().build();
+        List<ChatMessagesModel> messages = chatService.getMessagesByRoomId(roomId);
+        return ResponseEntity.ok(messages);
     }
 }
-
