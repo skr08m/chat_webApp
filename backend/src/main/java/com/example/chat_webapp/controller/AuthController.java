@@ -1,38 +1,34 @@
 package com.example.chat_webapp.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.chat_webapp.dto.LoginRequest;
-
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.chat_webapp.entitiy.UsersModel;
+import com.example.chat_webapp.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
     /**
      * POST /api/auth/login
-     * リクエストボディ：{ username, email, password }
+     * リクエストボディ：{ email, password }
      * 認証不要
      * ログインしてJWTを取得する
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        //TODO未実装
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * POST /api/auth/logout
-     * リクエストボディ：なし
-     * 認証必要
-     * ログアウト（トークン破棄または無視）
-     */
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-        //TODO未実装
-        return ResponseEntity.ok().build();
+        String token = authService.login(request.getEmail(), request.getPassword());
+        return ResponseEntity.ok(Map.of("token", token));
     }
 
     /**
@@ -43,7 +39,12 @@ public class AuthController {
      */
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
-        //TODO未実装
-        return ResponseEntity.ok().build();
+        UsersModel user = authService.getCurrentUser();
+
+        return ResponseEntity.ok(Map.of(
+            "userId", user.getUserId(),
+            "email", user.getEmail(),
+            "username", user.getUsername()
+        ));
     }
 }
