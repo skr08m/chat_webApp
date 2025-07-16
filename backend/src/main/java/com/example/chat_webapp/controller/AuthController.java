@@ -33,7 +33,6 @@ public class AuthController {
             System.out.println("ログインAPI 呼び出し開始");
             String token = authService.login(request.getEmail(), request.getPassword());
             System.out.println("ログイン成功。トークン発行済み");
-            System.out.println("発行されたトークンは、" + token);
             return ResponseEntity.ok(Map.of("token", token));
         } catch (BadCredentialsException e) {
             System.out.println("BadCredentialsException: " + e.getMessage());

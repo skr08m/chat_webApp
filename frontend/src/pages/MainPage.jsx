@@ -11,7 +11,7 @@ import {
     closeAllSockets,
     sendMessageToRoom,
     addMessageListener
-} from "../services/socket";
+} from "../services/stomp-socket";
 
 export default function MainPage() {
     const navigate = useNavigate();
@@ -62,10 +62,7 @@ export default function MainPage() {
             return;
         }
         try {
-            const newRoom = await createRoom({
-                name,
-                description,
-            });
+            const newRoom = await createRoom(name, description,);
             setRooms((prev) => [...prev, newRoom]);
             setMessagesByRoom((prev) => ({ ...prev, [newRoom.id]: [] }));
             setSelectedRoomId(newRoom.id);

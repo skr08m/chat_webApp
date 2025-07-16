@@ -16,17 +16,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    //認証処理で利用する UserDetails 型のオブジェクトを生成して返す
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UsersModel user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        @Override
+        //認証処理で利用する UserDetails 型のオブジェクトを生成して返す
+        public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+            UsersModel user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        // org.springframework.security.core.userdetails.Userを返す例
-        return org.springframework.security.core.userdetails.User.builder()
-            .username(user.getEmail())
-            .password(user.getPassword())
-            .authorities("ROLE_USER")  // 必要に応じて権限を設定
-            .build();
-    }//AuthServiceで使用している
+            // org.springframework.security.core.userdetails.Userを返す例
+            return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .authorities("ROLE_USER")  // 必要に応じて権限を設定
+                .build();
+        }//AuthServiceで使用している
 }

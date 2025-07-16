@@ -8,12 +8,26 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 @Component
 public class JwtTokenProvider {
 
     // HS512に対応した十分な長さのBase64エンコードキー（256ビット以上）
     private final String jwtSecret = "testEncordKeyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy";
     private final long jwtExpirationMs = 86400000; // 24時間
+    @Autowired
+    private UserDetailsService userDetailsService;
+    //JwtHandshakeInterceptor用
+    public Authentication getAuthentication(String token) {
+        String username = getUsernameFromToken(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
 
     // 署名鍵を取得
     private Key getSigningKey() {
@@ -57,4 +71,5 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
 }

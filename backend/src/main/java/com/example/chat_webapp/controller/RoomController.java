@@ -1,6 +1,7 @@
 package com.example.chat_webapp.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -58,10 +59,15 @@ public class RoomController {
             String email = currentUser.getEmail();
 
             // ルームを作成し、roomId を取得
-            roomService.createRoom(request, email);
+            Long id = roomService.createRoom(request, email);
 
             // レスポンス返却
-            return ResponseEntity.ok().build();
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", id);
+            response.put("name", request.getName());
+            response.put("description", request.getDescliption());
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());

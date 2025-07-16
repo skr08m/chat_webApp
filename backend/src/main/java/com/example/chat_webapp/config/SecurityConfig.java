@@ -48,7 +48,7 @@ public class SecurityConfig {
      * .build();
      * }
      */
-    //テスト用
+    // テスト用
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -59,6 +59,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/users/register",
+                                "/ws-chat/**", // ← ここを追加
                                 "/ws/**",
                                 "/app/**",
                                 "/h2-console/**" // ← ここを追加
