@@ -1,23 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 
-export default function ChatWindow({ messages, selectedRoomId, setMessagesByRoom }) {
+export default function ChatWindow({
+    messages,
+    selectedRoomId,
+    onSendMessage,
+    currentUserId,
+    currentUsername // ← これを追加
+}) {
+
     const [newMessage, setNewMessage] = useState("");
     const messageAreaRef = useRef(null);
 
     const handleSend = () => {
         if (newMessage.trim() === "") return;
-
-        const newMsg = {
-            id: Date.now(),
-            senderId: 1, // 仮のユーザーID
-            content: newMessage,
-            timestamp: new Date().toISOString(),
-        };
-
-        setMessagesByRoom(prev => ({
-            ...prev,
-            [selectedRoomId]: [...(prev[selectedRoomId] || []), newMsg],
-        }));
+        onSendMessage(newMessage);
         setNewMessage("");
     };
 
@@ -33,14 +29,38 @@ export default function ChatWindow({ messages, selectedRoomId, setMessagesByRoom
                 ref={messageAreaRef}
                 style={{ flexGrow: 1, overflowY: "auto", marginBottom: "10px" }}
             >
-                {messages.map(({ id, senderId, content, timestamp }) => (
-                    <div key={id} style={{ marginBottom: "8px" }}>
-                        <b>{senderId === 1 ? "自分" : `ユーザー${senderId}`}</b>: {content}
-                        <div style={{ fontSize: "0.7em", color: "#666" }}>
-                            {new Date(timestamp).toLocaleTimeString()}
+                {messages.map(({ id, senderId, content, timestamp }) => {
+                    const isOwnMessage = senderId === String(currentUserId);
+                    return (
+                        <div
+                            key={id}
+                            style={{
+                                display: "flex",
+                                justifyContent: isOwnMessage ? "flex-end" : "flex-start",
+                                marginBottom: "8px"
+                            }}
+                        >
+                            <div
+                                style={{
+                                    backgroundColor: isOwnMessage ? "#dcf8c6" : "#f1f0f0",
+                                    padding: "8px 12px",
+                                    borderRadius: "12px",
+                                    maxWidth: "60%",
+                                    wordWrap: "break-word"
+                                }}
+                            >
+                                <b>{isOwnMessage ? "自分" : `ユーザー${senderId}`}</b>: {content}
+                                <div style={{
+                                    fontSize: "0.7em",
+                                    color: "#666",
+                                    textAlign: isOwnMessage ? "right" : "left"
+                                }}>
+                                    {new Date(timestamp).toLocaleTimeString()}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
             <input
                 type="text"

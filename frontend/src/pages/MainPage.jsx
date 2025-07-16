@@ -1,5 +1,4 @@
-// src/pages/MainPage.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { styles } from "../styles";
 import ChatSidebar from "../components/ChatSidebar";
@@ -10,10 +9,10 @@ import {
     connectAllRoomsWebSocket,
     closeAllSockets,
     sendMessageToRoom,
-    addMessageListener
+    addMessageListener,
 } from "../services/stomp-socket";
 
-export default function MainPage() {
+export default function MainPage({ user }) {
     const navigate = useNavigate();
 
     const [rooms, setRooms] = useState([]);
@@ -23,6 +22,9 @@ export default function MainPage() {
     const [newRoomName, setNewRoomName] = useState("");
     const [newRoomDescription, setNewRoomDescription] = useState("");
 
+    // WebSocket接続済みかどうか
+    const isSocketConnected = useRef(false);
+
     useEffect(() => {
         const init = async () => {
             try {
@@ -31,7 +33,10 @@ export default function MainPage() {
                 setMessagesByRoom(messagesByRoom);
                 if (rooms.length > 0) {
                     setSelectedRoomId(rooms[0].id);
-                    connectAllRoomsWebSocket(rooms);
+                    if (!isSocketConnected.current) {
+                        connectAllRoomsWebSocket(rooms);
+                        isSocketConnected.current = true;
+                    }
                 }
             } catch (err) {
                 alert("ルームの取得に失敗しました");
@@ -42,17 +47,28 @@ export default function MainPage() {
 
     useEffect(() => {
         const handleMessage = (roomId, newMsg) => {
-            setMessagesByRoom(prev => ({
-                ...prev,
-                [roomId]: [...(prev[roomId] || []), newMsg],
-            }));
+            setMessagesByRoom((prev) => {
+                const existing = prev[roomId] || [];
+
+                // 重複チェック：もしすでに同じIDのメッセージがあれば追加しない
+                if (existing.some((msg) => msg.id === newMsg.id)) {
+                    return prev;
+                }
+
+                return {
+                    ...prev,
+                    [roomId]: [...existing, newMsg],
+                };
+            });
         };
+
         addMessageListener(handleMessage);
     }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         closeAllSockets();
+        isSocketConnected.current = false;
         navigate("/login");
     };
 
@@ -62,11 +78,19 @@ export default function MainPage() {
             return;
         }
         try {
-            const newRoom = await createRoom(name, description,);
+            const newRoom = await createRoom(name, description);
             setRooms((prev) => [...prev, newRoom]);
             setMessagesByRoom((prev) => ({ ...prev, [newRoom.id]: [] }));
             setSelectedRoomId(newRoom.id);
-            connectAllRoomsWebSocket([newRoom]);
+
+            // すでに接続済みなら追加のルームだけ接続
+            if (isSocketConnected.current) {
+                connectAllRoomsWebSocket([newRoom]);
+            } else {
+                connectAllRoomsWebSocket([newRoom]);
+                isSocketConnected.current = true;
+            }
+
             setNewRoomName("");
             setNewRoomDescription("");
         } catch (err) {
@@ -75,12 +99,15 @@ export default function MainPage() {
     };
 
     const handleSendMessage = (content) => {
-        if (!content.trim() || !selectedRoomId) return;
+        if (!content.trim() || !selectedRoomId || !user) return;
+
         sendMessageToRoom(selectedRoomId, content);
+
+        // 送信時に即時UIへ反映はしない（サーバーからの反射で表示する）
     };
 
     const selectedMessages = messagesByRoom[selectedRoomId] || [];
-    const selectedRoom = rooms.find(r => r.id === selectedRoomId);
+    const selectedRoom = rooms.find((r) => r.id === selectedRoomId);
 
     return (
         <div style={styles.container}>
@@ -101,6 +128,8 @@ export default function MainPage() {
                     messages={selectedMessages}
                     selectedRoomId={selectedRoomId}
                     onSendMessage={handleSendMessage}
+                    currentUserId={user?.userId}
+                    currentUsername={user?.username}
                 />
             </div>
         </div>

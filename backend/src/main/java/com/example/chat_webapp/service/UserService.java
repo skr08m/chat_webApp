@@ -15,8 +15,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
 
     public UserService(UserRepository userRepository,
             PasswordEncoder passwordEncoder,
@@ -24,12 +22,10 @@ public class UserService {
             JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    //ユーザー登録処理
-    @Transactional //トランザクション用アノテーション
+    // ユーザー登録処理
+    @Transactional // トランザクション用アノテーション
     public UsersModel registerUser(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("このメールアドレスはすでに登録されています。");

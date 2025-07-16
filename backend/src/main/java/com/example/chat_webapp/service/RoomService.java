@@ -56,7 +56,7 @@ public class RoomService {
     }
 
     public List<ChatRoomsModel> getRoomsByUserId(Long userId) {
-        return chatRoomRepository.findByCreatedBy(userId);
+        return chatRoomRepository.findRoomsByUserId(userId);
     }
 
     // ルーム削除（オーナー確認付き）
