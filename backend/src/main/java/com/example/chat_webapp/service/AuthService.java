@@ -34,14 +34,11 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(authToken);
         // 認証が成功したら、SecurityContextHolderにAuthenticationを設定(後々の認証用に発行済みトークンとして保持しておく)
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UsersModel user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         // 認証成功ならJWTを生成して返す
-        String id = user.getUserId().toString();
-        return jwtTokenProvider.generateToken(id);
+        return jwtTokenProvider.generateToken(email);
     }
 
-    // 【2】現在ログイン中のユーザー情報取得
+    // 現在ログイン中のユーザー情報取得
     public UsersModel getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

@@ -1,20 +1,26 @@
 package com.example.chat_webapp.controller;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.chat_webapp.dto.RegisterRequest;
 import com.example.chat_webapp.dto.VerifyRequest;
+import com.example.chat_webapp.entitiy.UsersModel;
+import com.example.chat_webapp.service.AuthService;
 import com.example.chat_webapp.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final AuthService authService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     /**
@@ -28,7 +34,9 @@ public class UserController {
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
             userService.registerUser(request);
-            return ResponseEntity.ok("ユーザーの仮登録が完了しました。");
+            String token = authService.login(request.getEmail(), request.getPassword());
+            System.out.println("ログイン成功。トークン発行済み");
+            return ResponseEntity.ok(Map.of("token", token));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {

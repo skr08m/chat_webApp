@@ -2,10 +2,12 @@ package com.example.chat_webapp.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,20 +46,29 @@ public class RoomController {
 
     /**
      * POST /api/rooms
-     * リクエストボディ：{ name }
+     * リクエストボディ：{ name, descliption }
      * 認証必要
      * 新規ルーム作成
      */
+    @PostMapping
     public ResponseEntity<?> createRoom(@RequestBody RoomCreateRequest request) {
-        // 現在の認証ユーザーのメールアドレスを取得
-        UsersModel currentUser = authService.getCurrentUser();
-        String email = currentUser.getEmail();
+        try {
+            // 現在の認証ユーザーのメールアドレスを取得
+            UsersModel currentUser = authService.getCurrentUser();
+            String email = currentUser.getEmail();
 
-        // ルームを作成し、roomId を取得
-        roomService.createRoom(request, email);
+            // ルームを作成し、roomId を取得
+            roomService.createRoom(request, email);
 
-        // レスポンス返却
-        return ResponseEntity.ok().build();
+            // レスポンス返却
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "サーバーエラーが発生しました"));
+        }
     }
 
     /**

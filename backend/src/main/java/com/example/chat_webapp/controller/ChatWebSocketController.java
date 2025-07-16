@@ -1,7 +1,10 @@
 package com.example.chat_webapp.controller;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -33,26 +36,31 @@ public class ChatWebSocketController {
      */
     @MessageMapping("/chat/send/{roomId}")
     public void sendMessage(@DestinationVariable String roomId, @Payload MessageRequest content) {
-        // 現在の認証ユーザーを取得
-        UsersModel sender = authService.getCurrentUser();
+        try {
+            // 現在の認証ユーザーを取得
+            UsersModel sender = authService.getCurrentUser();
 
-        ChatMessagesModel message = new ChatMessagesModel();
-        message.setRoomId(Long.parseLong(roomId));
-        message.setSenderId(sender.getUserId());
-        message.setContent(content.getMessageRequest());
-        message.setCreatedAt(ZonedDateTime.now());
-        message.setDeleted(false);
+            ChatMessagesModel message = new ChatMessagesModel();
+            message.setRoomId(Long.parseLong(roomId));
+            message.setSenderId(sender.getUserId());
+            message.setContent(content.getMessageRequest());
+            message.setCreatedAt(ZonedDateTime.now());
+            message.setDeleted(false);
 
-        chatService.saveMessage(message);
+            chatService.saveMessage(message);
 
-        // ブロードキャストするDTO
-        ChatMessage response = new ChatMessage();
-        response.setSender(message.getSenderId().toString());
-        response.setRoomId(message.getRoomId().toString());
-        response.setContent(content.getMessageRequest());
-        response.setTimestamp(message.getCreatedAt().toString());
+            // ブロードキャストするDTO
+            ChatMessage response = new ChatMessage();
+            response.setSender(message.getSenderId().toString());
+            response.setRoomId(message.getRoomId().toString());
+            response.setContent(content.getMessageRequest());
+            response.setTimestamp(message.getCreatedAt().toString());
 
-        // 特定ルームに送信
-        messagingTemplate.convertAndSend("/topic/room." + roomId, response);
+            // 特定ルームに送信
+            messagingTemplate.convertAndSend("/topic/room." + roomId, response);
+        } catch (Exception e) {
+            System.out.println("ソケットエラー: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

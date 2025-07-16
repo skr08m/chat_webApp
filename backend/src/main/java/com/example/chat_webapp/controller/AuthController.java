@@ -2,7 +2,9 @@ package com.example.chat_webapp.controller;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.chat_webapp.dto.LoginRequest;
@@ -27,8 +29,22 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        String token = authService.login(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok(Map.of("token", token));
+        try {
+            System.out.println("ログインAPI 呼び出し開始");
+            String token = authService.login(request.getEmail(), request.getPassword());
+            System.out.println("ログイン成功。トークン発行済み");
+            System.out.println("発行されたトークンは、" + token);
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (BadCredentialsException e) {
+            System.out.println("BadCredentialsException: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "メールアドレスまたはパスワードが正しくありません"));
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "サーバーエラーが発生しました"));
+        }
     }
 
     /**
@@ -42,9 +58,8 @@ public class AuthController {
         UsersModel user = authService.getCurrentUser();
 
         return ResponseEntity.ok(Map.of(
-            "userId", user.getUserId(),
-            "email", user.getEmail(),
-            "username", user.getUsername()
-        ));
+                "userId", user.getUserId(),
+                "email", user.getEmail(),
+                "username", user.getUsername()));
     }
 }

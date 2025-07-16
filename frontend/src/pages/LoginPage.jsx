@@ -1,27 +1,23 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-// 背景全体
 const pageStyle = {
     minHeight: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e0f7fa", // パステルブルー
+    backgroundColor: "#e0f7fa",
 };
-
-// フォームカード
-const formStyle = {
+const formContainer = {
     width: "90%",
     maxWidth: "420px",
+    backgroundColor: "#fff3e0",
     padding: "35px",
-    backgroundColor: "#c8e6c9", // ミントグリーン
     borderRadius: "16px",
     boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
     fontFamily: "'Segoe UI', sans-serif",
 };
-
-// 入力欄
 const inputStyle = {
     width: "100%",
     padding: "12px 14px",
@@ -29,14 +25,12 @@ const inputStyle = {
     borderRadius: "6px",
     border: "1px solid #ccc",
     fontSize: "16px",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
 };
-
-// ボタン
 const buttonStyle = {
     width: "100%",
     padding: "12px",
-    backgroundColor: "#0077c2", // ディープブルー
+    backgroundColor: "#0077c2",
     color: "white",
     fontWeight: "bold",
     border: "none",
@@ -45,38 +39,55 @@ const buttonStyle = {
     cursor: "pointer",
     transition: "background-color 0.3s ease",
 };
-
 const linkStyle = {
     color: "#0077c2",
     textDecoration: "none",
 };
 
-export default function Register({ setUser }) {
-    const [username, setUsername] = useState("");
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+export default function LoginPage({ setUser }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("※押下時、次回以降はメール認証が必要です。");
-        setUser({ username, email });
-        navigate("/");
+
+        try {
+            // 1. ログインAPIへPOST
+            const loginRes = await axios.post(`${API_BASE}/auth/login`, { email, password }, { withCredentials: true });
+
+            // 2. トークンをlocalStorageに保存
+            const token = loginRes.data.token;
+            localStorage.setItem("token", token);
+            console.log("受け取ったトークン: " + token);
+
+            // 3. ユーザー情報取得APIを呼び出す（トークンをAuthorizationヘッダーにセット）
+            const meRes = await axios.get(`${API_BASE}/auth/me`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            // 4. 親コンポーネントにユーザー情報をセット
+            setUser(meRes.data);
+
+            // 5. メインページへ遷移
+            navigate("/");
+        } catch (error) {
+            if (error.response) {
+                alert("ログイン失敗: " + (error.response.data.message || error.response.statusText));
+            } else {
+                alert("通信エラーが発生しました。");
+            }
+            console.error(error);
+        }
     };
 
     return (
         <div style={pageStyle}>
-            <div style={formStyle}>
-                <h2 style={{ marginBottom: "25px", color: "#37474f" }}>新規登録</h2>
+            <div style={formContainer}>
+                <h2 style={{ color: "#37474f", marginBottom: "25px" }}>ログイン</h2>
                 <form onSubmit={handleSubmit}>
-                    <label>ユーザー名</label>
-                    <input
-                        required
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        style={inputStyle}
-                    />
-
                     <label>メールアドレス</label>
                     <input
                         type="email"
@@ -96,11 +107,11 @@ export default function Register({ setUser }) {
                     />
 
                     <button type="submit" style={buttonStyle}>
-                        登録
+                        ログイン
                     </button>
                 </form>
-                <p style={{ marginTop: "18px", fontSize: "14px" }}>
-                    ログインは <Link to="/login" style={linkStyle}>こちら</Link>
+                <p style={{ marginTop: "18px" }}>
+                    新規登録は <Link to="/register" style={linkStyle}>こちら</Link>
                 </p>
             </div>
         </div>

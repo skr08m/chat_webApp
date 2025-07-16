@@ -30,7 +30,7 @@ public class UserService {
 
     //ユーザー登録処理
     @Transactional //トランザクション用アノテーション
-    public void registerUser(RegisterRequest request) {
+    public UsersModel registerUser(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("このメールアドレスはすでに登録されています。");
         }
@@ -41,6 +41,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setAuthenticated(false); // 初期状態は未認証（メール認証などを想定）
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }

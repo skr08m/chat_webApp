@@ -1,10 +1,10 @@
 package com.example.chat_webapp.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -12,12 +12,12 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     // HS512に対応した十分な長さのBase64エンコードキー（256ビット以上）
-    private final String jwtSecret = "your-very-secure-secret-key-change-this-to-at-least-64-chars!";
+    private final String jwtSecret = "testEncordKeyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy";
     private final long jwtExpirationMs = 86400000; // 24時間
 
     // 署名鍵を取得
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
