@@ -30,6 +30,9 @@ export default function ChatWindow({
                 style={{ flexGrow: 1, overflowY: "auto", marginBottom: "10px" }}
             >
                 {messages.map(({ id, senderId, content, timestamp }) => {
+                    console.log("senderId:", senderId, typeof senderId);//ログ
+                    console.log("currentUserId:", currentUserId, typeof currentUserId);//ログ
+
                     const isOwnMessage = senderId === String(currentUserId);
                     return (
                         <div

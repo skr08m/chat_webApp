@@ -13,8 +13,7 @@ function App() {
         <Route path="/login" element={<LoginPage setUser={setUser} />} />
         <Route path="/register" element={<RegisterPage setUser={setUser} />} />
         <Route
-          path="/"
-          element={user ? <Main user={user} setUser={setUser} /> : <Navigate to="/login" />}
+          path="/" element={user ? <Main user={user} setUser={setUser} /> : <Navigate to="/login" />}
         />
       </Routes>
     </BrowserRouter>
